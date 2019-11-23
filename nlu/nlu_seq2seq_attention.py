@@ -11,21 +11,23 @@ from nlu_seq2seq_attention_decoder import Decoder
 def run():
     # load raw data
     t2i_train, s2i_train, in2i_train, i2t_train, i2s_train, i2in_train, \
-    input_tensor_train, target_tensor_train, \
-    query_data_train, intent_data_train, intent_data_label_train, slot_data_train = load_atis('ms_cntk_atis.train.pkl', verbose=False)
+        input_tensor_train, target_tensor_train, \
+        query_data_train, intent_data_train, intent_data_label_train, slot_data_train \
+        = load_atis('ms_cntk_atis.train.pkl', verbose=False)
 
     t2i_test, s2i_test, in2i_test, i2t_test, i2s_test, i2in_test, \
-    input_tensor_test, target_tensor_test, \
-    query_data_test, intent_data_test, intent_data_label_test, slot_data_test = load_atis('ms_cntk_atis.test.pkl', verbose=False)
+        input_tensor_test, target_tensor_test, \
+        query_data_test, intent_data_test, intent_data_label_test, slot_data_test \
+        = load_atis('ms_cntk_atis.test.pkl', verbose=False)
 
     # vocab
     vocab_in_size, vocab_out_size = get_vocab_size(t2i_train, t2i_test, s2i_train, s2i_test)
 
     # tensors
     input_data_train, teacher_data_train, target_data_train, \
-    len_input_train, len_target_train  = create_tensors(input_tensor_train, target_tensor_train)
+        len_input_train, len_target_train = create_tensors(input_tensor_train, target_tensor_train)
     input_data_test, teacher_data_test, target_data_test, \
-    len_input_test, len_target_test  = create_tensors(input_tensor_test, target_tensor_test, max_len=len_input_train)
+        len_input_test, len_target_test = create_tensors(input_tensor_test, target_tensor_test, max_len=len_input_train)
 
     # data load
     vocab_out_size = 180
@@ -99,9 +101,9 @@ def run():
 
             if batch % 50 == 0:
                 print('Epoch {} Batch {} Loss {:.4f}'.format(epoch + 1, batch, batch_loss.numpy()))
-        
+
         if (epoch + 1) % 2 == 0:
-            checkpoint.save(file_prefix = checkpoint_prefix)
+            checkpoint.save(file_prefix=checkpoint_prefix)
 
         epoch_loss.append(total_loss / N_BATCH)
         print('Eopch {} Loss {:.4f}'.format(epoch + 1, total_loss / N_BATCH))

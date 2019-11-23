@@ -2,10 +2,10 @@ import os
 import pickle
 import numpy as np
 
-DATA_DIR='./data/atis/'
+DATA_DIR = './data/atis/'
 
 # load pickle file
-def load_ds(fname=os.path.join(DATA_DIR,'ats.train.pkl'), verbose=True):
+def load_ds(fname=os.path.join(DATA_DIR, 'ats.train.pkl'), verbose=True):
     with open(fname, 'rb') as stream:
         ds, dicts = pickle.load(stream)
     if verbose:
@@ -20,7 +20,7 @@ def load_ds(fname=os.path.join(DATA_DIR,'ats.train.pkl'), verbose=True):
 def load_atis(filename, add_start_end_token=False, verbose=True):
     train_ds, dicts = load_ds(os.path.join(DATA_DIR, filename), verbose)
     t2i, s2i, in2i = map(dicts.get, ['token_ids', 'slot_ids', 'intent_ids'])
-    i2t, i2s, i2in = map(lambda d: {d[k]:k for k in d.keys()}, [t2i, s2i, in2i])
+    i2t, i2s, i2in = map(lambda d: {d[k]: k for k in d.keys()}, [t2i, s2i, in2i])
     query, slots, intent = map(train_ds.get, ['query', 'slot_labels', 'intent_labels'])
 
     if add_start_end_token:
@@ -34,7 +34,7 @@ def load_atis(filename, add_start_end_token=False, verbose=True):
     query_data = []
     intent_data = []
     slot_data = []
-    to_show = np.random.randint(0, len(query)-1, 5)
+    to_show = np.random.randint(0, len(query) - 1, 5)
     for i in range(len(query)):
         input_tensor.append(query[i])
         slot_text = []
@@ -59,13 +59,14 @@ def load_atis(filename, add_start_end_token=False, verbose=True):
             print('Intent label: ', i2in[intent[i][0]])
             print('Slot text: ', slot)
             print('Slot vector: ', slot_vector)
-            print('*'*74)
+            print('*' * 74)
     query_data = np.array(query_data)
     intent_data = np.array(intent_data)
     slot_data = np.array(slot_data)
     intent_data_label = np.array(intent).flatten()
 
-    return t2i, s2i, in2i, i2t, i2s, i2in, input_tensor, target_tensor, query_data, intent_data, intent_data_label, slot_data
+    return t2i, s2i, in2i, i2t, i2s, i2in, \
+        input_tensor, target_tensor, query_data, intent_data, intent_data_label, slot_data
 
 # t2i_train, s2i_train, in2i_train, i2t_train, i2s_train, i2in_train, \
 # input_tensor_train, target_tensor_train, \

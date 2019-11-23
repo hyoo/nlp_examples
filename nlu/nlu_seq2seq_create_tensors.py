@@ -12,14 +12,14 @@ def create_tensors(input_tensor, target_tensor, nb_sample=9999999, max_len=0):
     len_target = max(len_target, max_len)
 
     input_data = tf.keras.preprocessing.sequence.pad_sequences(input_tensor,
-        maxlen=len_input,
-        padding='post')
-    
+                                                               maxlen=len_input,
+                                                               padding='post')
+
     teacher_data = tf.keras.preprocessing.sequence.pad_sequences(target_tensor,
-        maxlen=len_target,
-        padding='post')
-    
-    target_data = [[teacher_data[n][i+1] for i in range(len(teacher_data[n])-1)] for n in range(len(teacher_data))]
+                                                                 maxlen=len_target,
+                                                                 padding='post')
+
+    target_data = [[teacher_data[n][i + 1] for i in range(len(teacher_data[n]) - 1)] for n in range(len(teacher_data))]
     target_data = tf.keras.preprocessing.sequence.pad_sequences(target_data, maxlen=len_target, padding='post')
     target_data = target_data.reshape((target_data.shape[0], target_data.shape[1], 1))
 
@@ -29,7 +29,8 @@ def create_tensors(input_tensor, target_tensor, nb_sample=9999999, max_len=0):
     teacher_data = teacher_data[p]
     target_data = target_data[p]
 
-    return input_data[:min(nb_sample, nb)], teacher_data[:min(nb_sample, nb)], target_data[:min(nb_sample, nb)], len_input, len_target
+    return input_data[:min(nb_sample, nb)], teacher_data[:min(nb_sample, nb)], target_data[:min(nb_sample, nb)], \
+        len_input, len_target
 
 # input_data_train, teacher_data_train, target_data_train, \
 # len_input_train, len_target_train  = create_tensors(input_tensor_train, target_tensor_train)
